@@ -5,7 +5,7 @@ import com.aida.usefy_lite.model.User;
 
 public interface UserService {
 
-    User registerUser(RegistrationRequest userData);
+    User registerUser(RegistrationRequest userData) throws IllegalArgumentException;
 
     User findByUsername(String username);
 }
