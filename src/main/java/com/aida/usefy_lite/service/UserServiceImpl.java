@@ -19,8 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(RegistrationRequest userData) {
+        //Check if username already exists
         if (userRepository.findByUsername(userData.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+            throw new IllegalArgumentException("Username already exists");
         }
 
         // Hash the password

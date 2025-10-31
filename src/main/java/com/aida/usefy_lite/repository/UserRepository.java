@@ -9,6 +9,13 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    /*
+     You can define custom query methods if needed, e.g.:
+     Spring Data JPA:
+     1) Looks at the method name (findByUsername)
+     2) Parses it
+     */
+
 
     Optional<User> findByUsername(String username);
 }

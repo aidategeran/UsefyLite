@@ -27,7 +27,7 @@ public class UserServiceImplTest {
 
     @Test
     void registerUser_ShouldSaveUser_WhenUsernameDoesNotExist() {
-        RegistrationRequest request = new RegistrationRequest();
+        RegistrationRequest request = new RegistrationRequest("John", "1234");
 
     }
 }

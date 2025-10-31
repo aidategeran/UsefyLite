@@ -6,10 +6,7 @@ import com.aida.usefy_lite.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -24,14 +21,25 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+
+    //.....................
+    //Registration endpoint
+    //.....................
     @PostMapping("/register")
     public ResponseEntity<String> register (@RequestBody RegistrationRequest request) {
-        userService.registerUser(request);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        try {
+            userService.registerUser(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
-
-    @PostMapping("/login")
+    //...............
+    // Login Endpoint
+    //...............
+    @GetMapping ("/login")
     public ResponseEntity<String> login (@RequestBody LoginRequest request) {
         var user = userService.findByUsername(request.getUsername());
         if (user == null) {
