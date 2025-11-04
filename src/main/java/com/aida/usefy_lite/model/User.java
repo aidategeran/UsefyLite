@@ -22,7 +22,7 @@ public class User {
     }
 
     // Constructor with fields
-    public User(String username, String passwordHash) {
+    public User( String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
     }
