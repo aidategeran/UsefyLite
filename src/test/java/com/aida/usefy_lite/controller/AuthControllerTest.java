@@ -46,7 +46,7 @@ class AuthControllerTest {
                 MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"john\",\"password\":\"1234\"}")
-                        
+
 
         );
 
