@@ -39,7 +39,7 @@ public class AuthController {
     //...............
     // Login Endpoint
     //...............
-    @GetMapping ("/login")
+    @PostMapping ("/login")
     public ResponseEntity<String> login (@RequestBody LoginRequest request) {
         var user = userService.findByUsername(request.getUsername());
         if (user == null) {
