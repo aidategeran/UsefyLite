@@ -17,7 +17,7 @@ on:
 permissions:
   contents: read
   id-token: write
-  dependency-graph: write
+  security-events: write
 
 jobs:
   build:
