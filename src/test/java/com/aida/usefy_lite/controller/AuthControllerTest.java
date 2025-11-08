@@ -71,6 +71,8 @@ class AuthControllerTest {
                 .andExpect(content().string("Username already exists"));
     }
 
+
+
     // ✅ Login success
     @Test
     void login_ShouldReturn200_WhenCredentialsValid() throws Exception {
