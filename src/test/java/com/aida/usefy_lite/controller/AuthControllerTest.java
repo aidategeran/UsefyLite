@@ -53,7 +53,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"john\",\"password\":\"1234\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("ser registered successfully"));
+                .andExpect(content().string("User registered successfully"));
     }
 
 
