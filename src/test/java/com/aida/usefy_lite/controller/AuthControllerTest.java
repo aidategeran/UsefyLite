@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 
-
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
@@ -69,6 +68,12 @@ class AuthControllerTest {
                         .content("{\"username\":\"john\",\"password\":\"1234\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Username already exists"));
+    }
+
+
+    @Test
+    void register_ShouldReturnBadRequest_WhenUserNameEmpty() throws Exception {
+        when(userService.registerUser(any())).thenThrow();
     }
 
 
