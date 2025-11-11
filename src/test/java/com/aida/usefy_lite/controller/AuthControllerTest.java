@@ -71,11 +71,45 @@ class AuthControllerTest {
     }
 
 
+    // ❌ Empty username
     @Test
-    void register_ShouldReturnBadRequest_WhenUserNameEmpty() throws Exception {
-        when(userService.registerUser(any())).thenThrow();
+    void register_ShouldReturn400_WhenUsernameIsEmpty() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"\", \"password\":\"1234\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username and password cannot be empty"));
     }
 
+    // ❌ Empty password
+    @Test
+    void register_ShouldReturn400_WhenPasswordIsEmpty() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john\", \"password\":\"\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username and password cannot be empty"));
+    }
+
+    // ❌ Both empty
+    @Test
+    void register_ShouldReturn400_WhenBothFieldsAreEmpty() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"\", \"password\":\"\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username and password cannot be empty"));
+    }
+
+    // ❌ Missing fields
+    @Test
+    void register_ShouldReturn400_WhenFieldsMissing() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username and password cannot be empty"));
+    }
 
 
     // ✅ Login success

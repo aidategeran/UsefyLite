@@ -27,6 +27,15 @@ public class AuthController {
     //.....................
     @PostMapping("/register")
     public ResponseEntity<String> register (@RequestBody RegistrationRequest request) {
+
+        if (request.getUsername() == null || request.getUsername().isBlank() ||
+                request.getPassword() == null || request.getPassword().isBlank()) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Username and password cannot be empty");
+        }
+
         try {
             userService.registerUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
