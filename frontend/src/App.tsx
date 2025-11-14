@@ -1,24 +1,15 @@
 
-import './App.css'
+import { Link, Outlet } from "react-router-dom";
 
-import { useEffect } from "react";
 
-function App() {
-    useEffect(() => {
-        fetch("/api/auth/test")
-            .then((res) => res.text())
-            .then((data) => console.log("Backend says:", data))
-            .catch((err) => console.error(err));
-    }, []);
-
+export default function App() {
     return (
         <div>
-            <h1>Frontend is running ✅</h1>
-            <p>Check the browser console to see if backend responds.</p>
+            <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+                <Link to="/">Home</Link>
+                <Link to="register">Register</Link>
+            </nav>
+            <Outlet />
         </div>
     );
 }
-
-
-
-export default App;
