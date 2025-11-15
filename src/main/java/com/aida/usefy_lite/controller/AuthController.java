@@ -3,9 +3,11 @@ package com.aida.usefy_lite.controller;
 import com.aida.usefy_lite.dto.LoginRequest;
 import com.aida.usefy_lite.dto.RegistrationRequest;
 import com.aida.usefy_lite.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -26,7 +28,7 @@ public class AuthController {
     //Registration endpoint
     //.....................
     @PostMapping("/register")
-    public ResponseEntity<String> register (@RequestBody RegistrationRequest request) {
+    public ResponseEntity<String> register (@Valid @RequestBody RegistrationRequest request, BindingResult result) {
 
         if (request.getUsername() == null || request.getUsername().isBlank() ||
                 request.getPassword() == null || request.getPassword().isBlank()) {
