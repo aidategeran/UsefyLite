@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -16,11 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final View error;
 
 
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, View error) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.error = error;
     }
 
 
@@ -28,23 +34,19 @@ public class AuthController {
     //Registration endpoint
     //.....................
     @PostMapping("/register")
-    public ResponseEntity<String> register (@Valid @RequestBody RegistrationRequest request, BindingResult result) {
-
-        if (request.getUsername() == null || request.getUsername().isBlank() ||
-                request.getPassword() == null || request.getPassword().isBlank()) {
-
+    public ResponseEntity<?> register (@Valid @RequestBody RegistrationRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body("Username and password cannot be empty");
+                    .body((errors));
         }
+        userService.registerUser(request);
 
-        try {
-            userService.registerUser(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-
+        return ResponseEntity.ok("User registered successfully!");
     }
 
     //...............

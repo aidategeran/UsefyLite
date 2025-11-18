@@ -1,11 +1,12 @@
 
 import React, { useState } from "react";
-import "./Register.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
     const [form, setForm] = useState({ username: "", password: "" });
     const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -13,66 +14,62 @@ export default function Register() {
         setErrors({ ...errors, [name]: "" });
     };
 
-    const validate = () => {
-        const newErrors: { username?: string; password?: string } = {};
-        if (!form.username.trim()) newErrors.username = "Username is required";
-        if (!form.password.trim()) newErrors.password = "Password is required";
-        else if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
-        return newErrors;
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const validationErrors = validate();
-
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/register", {
+            const response = await fetch("http://localhost:8080/register", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(form),
             });
 
-            const text = await response.text();
-            setMessage(response.ok ? text : `Error: ${text}`);
-        } catch {
-            setMessage("Error: could not connect to server");
+            if (response.status === 400) {
+                const data = await response.json();
+                setErrors(data);
+                return;
+            }
+
+            if (response.ok) {
+                setMessage("Registration successful!");
+
+                // Redirect after 1 second
+                setTimeout(() => {
+                    navigate("/success");
+                }, 1000);
+            }
+
+        } catch (error) {
+            setMessage("Something went wrong.");
         }
     };
 
     return (
-        <form className="register-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <h2>Register</h2>
 
-            <label>
-                Username:
-                <input
-                    name="username"
-                    value={form.username}
-                    onChange={handleChange}
-                    placeholder="Enter username"
-                />
-                {errors.username && <p className="error">{errors.username}</p>}
-            </label>
+            <input
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Username"
+            />
+            {errors.username && <p style={{ color: "red" }}>{errors.username}</p>}
 
-            <label>
-                Password:
-                <input
-                    type="password"
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    placeholder="Enter password"
-                />
-                {errors.password && <p className="error">{errors.password}</p>}
-            </label>
+            <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Password"
+            />
+            {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
 
-            <button type="submit">Sign Up</button>
-            {message && <p className="message">{message}</p>}
+            <button type="submit">Register</button>
+
+            {message && <p style={{ color: "green" }}>{message}</p>}
         </form>
     );
 }
