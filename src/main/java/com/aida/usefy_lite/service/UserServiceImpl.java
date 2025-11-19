@@ -1,6 +1,7 @@
 package com.aida.usefy_lite.service;
 
 import com.aida.usefy_lite.dto.RegistrationRequest;
+import com.aida.usefy_lite.exception.UserAlreadyExistsException;
 import com.aida.usefy_lite.model.User;
 import com.aida.usefy_lite.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public User registerUser(RegistrationRequest userData) {
         //Check if username already exists
         if (userRepository.findByUsername(userData.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new UserAlreadyExistsException("Username already exists");
         }
 
         // Hash the password

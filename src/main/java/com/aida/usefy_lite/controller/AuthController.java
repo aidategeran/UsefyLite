@@ -34,18 +34,10 @@ public class AuthController {
     //Registration endpoint
     //.....................
     @PostMapping("/register")
-    public ResponseEntity<?> register (@Valid @RequestBody RegistrationRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
-            );
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body((errors));
-        }
-        userService.registerUser(request);
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody RegistrationRequest request) {
 
+        userService.registerUser(request);
         return ResponseEntity.ok("User registered successfully!");
     }
 
