@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AiService {
 
-    @Value("${external.api.key}")
+    @Value("${external.ai.api.key}")
     private String apiKey;
 
     public String callExternalApi(String input) {
