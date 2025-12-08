@@ -15,7 +15,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
      1) Looks at the method name (findByUsername)
      2) Parses it
      */
+    Optional<User> findByUsername(String username);
+
+    boolean existsByUsername(String username);
 
 
-    static Optional<User> findByUsername(String username);
+
 }
