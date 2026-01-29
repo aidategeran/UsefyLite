@@ -2,6 +2,7 @@ package com.aida.usefy_lite.controller;
 
 import com.aida.usefy_lite.dto.ChatRequestDto;
 import com.aida.usefy_lite.dto.ChatResponseDto;
+import com.aida.usefy_lite.security.JwtService;
 import com.aida.usefy_lite.service.ChatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.mockito.Mockito.when;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,6 +27,9 @@ public class ChatControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private JwtService jwtService;
 
     @MockBean
     private ChatService chatService;
@@ -39,6 +44,7 @@ public class ChatControllerTest {
 
         mockMvc.perform(
                 post("/api/chat")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req))
         )
@@ -56,6 +62,7 @@ public class ChatControllerTest {
 
         mockMvc.perform(
                         post("/api/chat")
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(req))
                 )
@@ -72,6 +79,7 @@ public class ChatControllerTest {
 
         mockMvc.perform(
                         post("/api/chat")
+                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(req))
                 )
